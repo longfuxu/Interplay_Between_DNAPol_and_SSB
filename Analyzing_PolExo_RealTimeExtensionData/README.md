@@ -1,7 +1,6 @@
-# DNA Polymerase Activity Analysis
+# Real-time DNA primer extension assay for DNA polymerase activity analysis
 
-## Overview
-This Jupyter Notebook is designed to analyze the activity of DNA polymerase (Pol) and its exonuclease (exo) correction activity in real-time DNA primer extension assay. The analysis focuses on how the presence of Single-Strand Binding protein (SSB) affects both the polymerization and exonuclease activities of the enzyme. The notebook processes fluorescence intensity data over time, fitting two distinct linear models to segments of the data to extract rates of activity in the unit of Relative Fluorescence Units per second (RFU/s) as a function of SSB concentration.
+This Jupyter Notebook is used to analyze the activity of DNA polymerase (Pol) and its exonuclease (exo) activity in real-time DNA primer extension assay. The analysis focuses on how the presence of Single-Strand Binding protein (SSB) affects both the polymerization and exonuclease activities of the enzyme. The notebook processes fluorescence intensity data over time, fitting two distinct linear models to segments of the data to extract rates of activity in the unit of Relative Fluorescence Units per second (RFU/s) as a function of SSB concentration.
 
 ## Rationale Behind the Analysis
 ### First Linear Fit: Initial Polymerase Activity
@@ -18,7 +17,3 @@ The analysis generates plots that showcase both the polymerization and exonuclea
 ![alt text](<example data plot/PolActivity_SSBConc_1.5_1_4.5.png>)
 #### Exo Activity vs SSB Concentration
 ![alt text](<example data plot/ExoActivity_SSBConc_1.5_1_4.5.png>)
-## Example Data
-An example dataset is provided with the notebook, demonstrating the application of the analysis to real experimental data. This dataset includes time-course fluorescence measurements obtained from real-time PCR experiments, where the concentration of SSB protein was varied to assess its impact on the activity of DNA polymerase.
-
-The data structure consists of fluorescence intensity readings (RFU) measured over time (minutes), with different experimental conditions corresponding to various concentrations of SSB.

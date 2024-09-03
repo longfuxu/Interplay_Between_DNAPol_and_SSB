@@ -1,101 +1,53 @@
-# Force Measurement Analysis and Kymograph Analysis
+# DNA Polymerase and SSB Interaction Analysis
 
-This repository contains two separate Python scripts for analyzing fluorescence microscopy images of DNA polymerase molecules and processing force measurement data. Both scripts process data in `.tdms` format, and used together, they can provide insights into the dynamics of DNA polymerase activity. An example trace is provided in the folder `example data analysis`
+This repository houses a comprehensive suite of analytical tools designed to investigate the interactions between DNA polymerase and Single-Strand Binding (SSB) protein at both single-molecule and bulk assay levels. The repository is structured into three primary modules, each addressing specific aspects of DNA-protein interactions:
 
-## Force Measurement Analysis
+1. [Analyzing basepair-time traces](Analyzing_ChangePoint_SingleMolecule)
+2. [Analyzing the displacement of SSB by DNA polymerase](Analyzing_DNAp_Displaces_SSB)
+3. [Analyzing real-time DNA primer extension data](Analyzing_PolExo_RealTimeExtensionData)
 
-This Python jupyternotebook `1_CalculatingDNApTrace_OT.ipynb` performs data analysis on a Tdms file from force measurements. The analysis includes fitting data to the tWLC and FJC models, calculating ssDNA percent as a function of time, plotting DNA polymerase trace, calculating basepair changes, and exporting processed data to an Excel file.
+Each module contains a detailed README file explaining the code structure, a Jupyter notebook demonstrating the analysis workflow, and exemple datasets for reproducibility purposes. For specific version requirements, Python dependencies, and quick-start guides, please refer to the README file within each module.
 
-### Dependencies
+## 1. Change-point Detection using Single-Molecule Basepair-Time Traces
 
-- python==3.9
-- jupyterlab==3.0.12
-- matplotlib==3.3.4
-- more-itertools==8.7.0
-- npTDMS==1.1.0
-- numpy==1.20.1
-- opencv-python==4.5.1.48
-- pandas==1.2.3
-- scipy==1.6.1
-- tifffile==2021.3.5
-- sympy
+This Jupyter notebook presents a streamlined yet robust analytical pipeline for processing and interpreting DNA force-extension experiments conducted using optical tweezers. Specifically designed to handle raw experimental data in TDMS format, this notebook employs advanced polymer physics models (WLC for dsDNA, and FJC for ssDNA) to extract crucial biophysical parameters. The analysis pipeline encompasses several key components, including visualization of force-extension curves, quantification of ssDNA/dsDNA percentages catalysis by DNAp, and identification and characterization of discrete steps in DNAp processing events. 
+![Example data](property/Step_fitted.png)
 
-### Usage
+## 2. Real-time Visualization of DNA Polymerase Displacing SSB
 
-1. Input the file name with an absolute path.
-2. Run the script and follow the prompts to provide the starting and ending times for the events of interest (exo and pol).
-3. Provide the cycle number of interest.
-4. On the resulting plots, review the results and save output images and Excel files as desired.
+This module comprises three interconnected Jupyter notebooks, each addressing a specific aspect of the dynamic interplay between DNA polymerase and Single-Strand Binding (SSB) proteins. The first notebook, [Processing of force measurement data](Analyzing_DNAp_Displaces_SSB/1_CalculatingDNApTrace_OT.ipynb), focuses on the analysis and interpretation of force measurements obtained from optical tweezers experiments. The second notebook, [Observing DNA polymerase displacement of SSB in real time](Analyzing_DNAp_Displaces_SSB/2_Correlation_image_force.ipynb), correlates force measurements with fluorescence imaging data to visualize the real-time displacement of SSB by DNA polymerase. An optional third notebook, [Image processing for specific datasets](Analyzing_DNAp_Displaces_SSB/3_Correlation_force_processed_image.ipynb), provides advanced image processing techniques for specific datasets, enhancing the resolution and clarity of the DNA polymerase-SSB interaction visualization. All notebooks are designed to process data in `.tdms` format, ensuring compatibility and ease of use. When utilized in conjunction, these analytical tools offer comprehensive insights into the dynamics of DNA polymerase activity and its interaction with SSB. Each notebook includes a detailed walkthrough of the analysis process for reproducibility.
 
-### Output
+![Example data](property/image.png)
 
-The script generates several plots and processed data as follows:
+## 3. Real-time DNA Primer Extension Assay: Analyzing SSB's Effect on DNA Polymerase
 
-1. Force extension curves for tWLC and FJC models.
-2. Experimental data fit to tWLC and FJC Model.
-3. Basepair changes as a function of time.
-4. DNA polymerase traces.
-5. Smoothed basepair changes as a function of time.
+This Jupyter Notebook is dedicated to the quantitative analysis of DNA polymerase (Pol) activity and its associated exonuclease (exo) function within a real-time DNA primer extension assay. The primary objective is to elucidate the modulatory effects of Single-Strand Binding protein (SSB) on both the polymerization and exonuclease activities of the enzyme. The analytical approach involves processing time-resolved fluorescence intensity data and applying linear regression models to distinct segments of the fluorescence traces. This method enables the extraction of enzyme activity rates, expressed in Relative Fluorescence Units per second (RFU/s), and their correlation with SSB concentration. 
 
-Additionally, an Excel file containing processed data such as time, ssDNA percentage, junction position, and basepairs will be generated.
+![Example data](property/plot_wt_10_1.png)
 
-# Kymograph Analysis
+## Road Maps
 
-This script is used to analyze kymographs in fluorescence microscopy images of DNA polymerase molecules. It processes data in `.tdms` format, converts it into image data, helps visualize images and DNA polymerase trajectories on the kymographs, and  calculates distances between DNA polymerase and SSB (single-stranded DNA binding protein) trajectories. Data can then be saved in `.csv` format for further analysis.
+- **User Interface Development**: We aim to develop a user-friendly interface to make these analytical tools accessible to researchers without coding experience.
+- **Methodological Enhancements**: We are exploring the adoption of more advanced Python-centric methodologies for data analysis, such as the [Bayesian changepoint detection for single-molecule analysis](https://github.com/longfuxu/bayesian_changepoint_detection_single_molecule).
+- **High-Throughput Analysis**: We are developing scripts to efficiently handle and process large-scale datasets.
 
-## Requirements
+## Contributing
+We welcome contributions to enhance and expand this project. Please fork the repository, make your changes, and submit a pull request. For contribution you can also contact Longfu Xu or Prof. Gijs Wuite
 
-- Python 3.9
-- JupyterLab 3.0.12
-- lumicks.pylake 0.8.1
-- matplotlib 3.3.4
-- more-itertools 8.7.0
-- npTDMS 1.1.0
-- numpy 1.20.1
-- opencv-python 4.5.1.48
-- pandas 1.2.3
-- scipy 1.6.1
-- tifffile 2021.3.5
-- tabulate 0.8.6
+## Support and Contact
+Please note that the code in this repository is custom written for internal lab use and still may contain bugs. For questions, support, or feedback, please contact Dr. Longfu Xu at [longfu2.xu[at]gmail.com](mailto:longfu2.xu@gmail.com). 
 
-## Steps
-
-1. Read raw image data of a `.tdms` file with TdmsFile function.
-2. Access `.tdms` file and convert it into image data.
-3. Display the kymograph in the notebook.
-4. Save the `.tdms` file as a `.tiff` image.
-5. Split the image into different color channels and display the images.
-6. Read and display the DNA polymerase trajectory calculated from force measurement data.
-7. Overlay DNA polymerase trace on top of both DNA polymerase and SSB images.
-8. Detect SSB trajectory bands using the lumicks.pylake package.
-9. Refine and smooth SSB trajectories using the Savitzky-Golay filter.
-10. Plot DNA polymerase and SSB trajectories together in separate subplots.
-11. Calculate distances between DNA polymerase and SSB trajectories.
-12. Save data in separate `.csv` files for easy retrieval later.
-
-## Usage
-
-- Modify the file path in the input() function for the kymograph `.tdms` file and the trace_file.
-- Customize plot appearance and region of interest (ROI) as needed.
-- Adjust the parameters for the Savitzky-Golay filter for optimal results.
-- Run the script and visualize the results in the notebook.
-
-## Output
-
-- DNA polymerase traces with time and position data saved in `.csv` format.
-- Smoothed SSB trajectories with time and position data saved in `.csv` format.
-- Distances between DNA polymerase and SSB traces calculated and saved in `.csv` format.
-- Plots saved in `.eps` and `.png` format.
-
-# Note
-
-All codes listed in this repository are developed by Longfu Xu (longfuxu.com) during the phD work in Gijs Wuite Group.
-
-Please note that the code in this repository is custom written for internal lab use and still may contain bugs; external support cannot be guaranteed.
-
-Developer:
-
-Longfu Xu (longfuxu.com) . Maintenance, development, support. For questions or reports, e-mail: [longfu2.xu@gmail.com](mailto:l2.xu@vu.nl)
-
-# Citation
+## Citation
 Xu, L. (2023) Grab, manipulate and watch single DNA molecule replication. PhD-Thesis - Research and graduation internal. Available at: https://doi.org/10.5463/thesis.424.
+
+## License
+
+This project is licensed under MPL-2.0 license. See `LICENSE` file for more details.
+
+## Acknowledgments
+
+All codes listed in this repository are developed by Dr. Longfu Xu (longfuxu.com) during the PhD work in [Gijs Wuite Lab](http://www.gijswuite.com/). Special thanks to all contributors and supporters of this project.
+
+
+
+
