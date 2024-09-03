@@ -38,7 +38,7 @@ We welcome contributions to enhance and expand this project. Please fork the rep
 Please note that the code in this repository is custom written for internal lab use and still may contain bugs. For questions, support, or feedback, please contact Dr. Longfu Xu at [longfu2.xu[at]gmail.com](mailto:longfu2.xu@gmail.com). 
 
 ## Citation
-Xu, L. (2023) Grab, manipulate and watch single DNA molecule replication. PhD-Thesis - Research and graduation internal. Available at: https://doi.org/10.5463/thesis.424.
+Xu, L. (2023). Grab, manipulate and watch single DNA molecule replication. [PhD-Thesis - Research and graduation internal, Vrije Universiteit Amsterdam]. https://doi.org/10.5463/thesis.424
 
 ## License
 
