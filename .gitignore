@@ -2,3 +2,5 @@
 .DS_Store
 example_data_analysis/
 _pycache_
+.venv/
+pyproject.toml
