@@ -8,6 +8,19 @@ This repository houses a comprehensive  tools designed to investigate the intera
 
 Each module contains a detailed README file explaining the code structure, a Jupyter notebook demonstrating the analysis workflow, and exemple datasets for reproducibility purposes. For specific version requirements, Python dependencies, and quick-start guides, please refer to the README file within each module.
 
+## Table of Contents
+1. [Quick Start](#quick-start)
+2. [Project Overview](#project-overview)
+    - [1. Change-point Detection using Single-Molecule Basepair-Time Traces](#1-change-point-detection-using-single-molecule-basepair-time-traces)
+    - [2. Real-time Visualization of DNA Polymerase Displacing SSB](#2-real-time-visualization-of-dna-polymerase-displacing-ssb)
+    - [3. Real-time DNA Primer Extension Assay: Analyzing SSB's Effect on DNA Polymerase](#3-real-time-dna-primer-extension-assay-analyzing-ssbs-effect-on-dna-polymerase)
+3. [Roadmap](#roadmap)
+4. [Contributing](#contributing)
+5. [Support and Contact](#support-and-contact)
+6. [Citation](#citation)
+7. [License](#license)
+8. [Acknowledgments](#acknowledgments)
+
 ## Quick Start
 To quickly get started with this codebase, please follow the steps below to set up your environment and install all necessary dependencies. It is important to use **Python 3.9** and a specific version of `lumicks.pylake` (**0.8.1**) to ensure compatibility.
 
@@ -99,7 +112,7 @@ To quickly get started with this codebase, please follow the steps below to set 
 - **Dependencies**: All other dependencies are managed by Poetry and are specified in the `pyproject.toml` file.
 - **Operating System Compatibility**: The code has been primarily tested on macOS and Linux. Windows users may need to adjust some commands accordingly.
 
-
+## Project Overview
 
 
 ## 1. Change-point Detection using Single-Molecule Basepair-Time Traces
@@ -119,7 +132,7 @@ This Jupyter Notebook is dedicated to the quantitative analysis of DNA polymeras
 
 ![Example data](property/plot_wt_10_1.png)
 
-## Road Maps
+## Roadmap
 
 - **User Interface Development**: We aim to develop a user-friendly interface to make these analytical tools accessible to researchers without coding experience.
 - **Methodological Enhancements**: We are exploring the adoption of more advanced Python-centric methodologies for data analysis, such as the [Bayesian changepoint detection for single-molecule analysis](https://github.com/longfuxu/bayesian_changepoint_detection_single_molecule).
