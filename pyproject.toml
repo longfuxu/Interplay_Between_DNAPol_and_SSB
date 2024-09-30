@@ -1,0 +1,34 @@
+[tool.poetry]
+name = "DNA_protein_projects"
+version = "0.1"
+description = "This is the source python code to generate results for DNAp-SSB manuscript"
+authors = ["longfuxu <l2.xu@vu.nl>"]
+license = "Mozilla Public License, v. 2.0."
+readme = "README.md"
+# packages = [{include = "dnap_ssb_project"}]
+
+[tool.poetry.dependencies]
+# be sure to use python 3.9 and lumicks-pylake = 0.8.1 for dependencies.
+python = "^3.9"
+lumicks-pylake = "0.8.1"
+# Remove version constraints for other dependencies
+numpy = "*"
+jupyterlab = "*"
+matplotlib = "*"
+more-itertools = "*"
+nptdms = "*"
+opencv-python = "*"
+pandas = "*"
+scipy = "*"
+tifffile = "*"
+tabulate = "*"
+pwlf = "*"
+sympy = "*"
+ipympl = "^0.9.4"
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

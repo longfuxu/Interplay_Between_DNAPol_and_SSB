@@ -8,6 +8,100 @@ This repository houses a comprehensive  tools designed to investigate the intera
 
 Each module contains a detailed README file explaining the code structure, a Jupyter notebook demonstrating the analysis workflow, and exemple datasets for reproducibility purposes. For specific version requirements, Python dependencies, and quick-start guides, please refer to the README file within each module.
 
+## Quick Start
+To quickly get started with this codebase, please follow the steps below to set up your environment and install all necessary dependencies. It is important to use **Python 3.9** and a specific version of `lumicks.pylake` (**0.8.1**) to ensure compatibility.
+
+### Prerequisites
+- **Python 3.9**: Make sure you have Python version 3.9 installed on your system.
+- **Git**: For cloning the repository.
+- **Poetry** (recommended): A tool for dependency management in Python projects. [Install Poetry](https://python-poetry.org/docs/#installation) if you don't have it.
+
+### Installation Steps
+
+1. **Clone the Repository**
+
+   Open your terminal and run:
+
+   ```bash
+   git clone https://github.com/longfuxu/Interplay_Between_DNAPol_and_SSB.git
+   cd Interplay_Between_DNAPol_and_SSB
+   ```
+
+2. **Ensure Python 3.9 is Installed**
+
+   Verify that Python 3.9 is installed:
+
+   ```bash
+   python3.9 --version
+   ```
+
+   If not installed, download it from the [official Python website](https://www.python.org/downloads/release/python-390/) or use a version manager like `pyenv`:
+
+   ```bash
+   # Install pyenv if not already installed
+   curl https://pyenv.run | bash
+
+   # Install Python 3.9.16
+   pyenv install 3.9.16
+
+   # Set local Python version to 3.9.16
+   pyenv local 3.9.16
+   ```
+
+3. **Set Up the Virtual Environment with Poetry**
+
+   Use Poetry to create a virtual environment using Python 3.9:
+
+   ```bash
+   # Ensure Poetry uses Python 3.9
+   poetry env use python3.9
+
+   # Install dependencies
+   poetry install
+   ```
+
+   This will create a virtual environment and install all dependencies specified in `pyproject.toml`, including `lumicks.pylake` version 0.8.1.
+
+4. **Activate the Virtual Environment**
+
+   Activate the virtual environment created by Poetry:
+
+   ```bash
+   poetry shell
+   ```
+
+5. **Verify the Installation**
+
+   Check that the correct versions of Python and `lumicks.pylake` are installed:
+
+   ```bash
+   python --version
+   # Expected output: Python 3.9.x
+
+   python -c "import lumicks.pylake; print(lumicks.pylake.__version__)"
+   # Expected output: 0.8.1
+   ```
+
+6. **Launch Jupyter Lab**
+
+   Navigate to the module you're interested in and start Jupyter Lab:
+
+   ```bash
+   jupyter lab
+   ```
+
+   Open the desired Jupyter Notebook and follow the instructions provided within.
+
+#### Notes
+
+- **Python Version**: It is crucial to use **Python 3.9** as some dependencies may not be compatible with newer versions of Python.
+- **lumicks.pylake Version**: The codebase requires `lumicks.pylake` version **0.8.1**. Using a different version may lead to compatibility issues.
+- **Dependencies**: All other dependencies are managed by Poetry and are specified in the `pyproject.toml` file.
+- **Operating System Compatibility**: The code has been primarily tested on macOS and Linux. Windows users may need to adjust some commands accordingly.
+
+
+
+
 ## 1. Change-point Detection using Single-Molecule Basepair-Time Traces
 
 This Jupyter notebook presents a streamlined yet robust pipeline for processing and interpreting DNA force-extension experiments conducted using optical tweezers. Specifically designed to handle raw experimental data in TDMS format, this notebook employs polymer physics models (WLC for dsDNA, and FJC for ssDNA) to extract crucial biophysical parameters. The analysis pipeline encompasses several key components, including visualization of force-extension curves, quantification of ssDNA/dsDNA percentages catalysis by DNAp, and identification and characterization of discrete steps in DNAp processing events. 
