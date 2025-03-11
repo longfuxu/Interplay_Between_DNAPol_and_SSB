@@ -25,6 +25,7 @@ tabulate = "*"
 pwlf = "*"
 sympy = "*"
 ipympl = "^0.9.4"
+openpyxl = "^3.1.5"
 
 [tool.poetry.group.dev.dependencies]
 ipykernel = "*"
