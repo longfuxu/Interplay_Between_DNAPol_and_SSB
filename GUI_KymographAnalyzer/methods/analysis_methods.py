@@ -844,4 +844,137 @@ def plot_dnap_ssb(self):
         save_button.pack(side=tk.LEFT, padx=5)
         
     except Exception as e:
-        messagebox.showerror("Error", f"Failed to plot DNAp and SSB trajectories: {e}") 
+        messagebox.showerror("Error", f"Failed to plot DNAp and SSB trajectories: {e}")
+
+def calculate_dnap_ssb_distance(self, plot_result=True):
+    """Calculate the distance between DNAp and SSB trajectories and optionally plot the results"""
+    if self.trace is None:
+        messagebox.showinfo("Info", "Please load a trace file first.")
+        return None
+    
+    if self.traces is None or len(self.traces) == 0:
+        messagebox.showinfo("Info", "No SSB trajectories detected. Please detect SSB trajectories first.")
+        return None
+    
+    try:
+        # Get DNAp data
+        dnap_time = self.trace['time'] if 'time' in self.trace.columns else self.trace['Time']
+        dnap_pos = self.trace['junction_position_all'] if 'junction_position_all' in self.trace.columns else self.trace['Position']
+        
+        # Apply Savitzky-Golay filter to DNAp data
+        window_length = min(21, len(dnap_time) - (len(dnap_time) % 2) - 1)  # Ensure odd length
+        if window_length < 3:
+            window_length = 3  # Minimum window length for Savitzky-Golay
+            
+        dnap_time_smooth = dnap_time
+        dnap_pos_smooth = savgol_filter(dnap_pos, window_length, 3) if len(dnap_time) > window_length else dnap_pos
+        
+        # Create interpolation function for smooth DNAp position
+        interp_DNAp = interpolate.interp1d(
+            dnap_time_smooth, dnap_pos_smooth, 
+            bounds_error=False, fill_value="extrapolate"
+        )
+        
+        distances = []
+        
+        # For each SSB trajectory, calculate the distance to DNAp
+        for i, ssb_trace in enumerate(self.smoothed_traces):
+            ssb_time = ssb_trace['Time'].values
+            ssb_pos = ssb_trace['Position'].values
+            
+            # Get DNAp position at SSB timepoints
+            dnap_pos_at_ssb_time = interp_DNAp(ssb_time)
+            
+            # Calculate distance (negative means SSB is ahead of DNAp)
+            position_diff = -(dnap_pos_at_ssb_time - ssb_pos)
+            
+            # Add to distances list
+            distances.append({
+                'trace_index': i,
+                'ssb_time': ssb_time,
+                'ssb_pos': ssb_pos, 
+                'dnap_pos': dnap_pos_at_ssb_time,
+                'distance': position_diff
+            })
+        
+        if not distances:
+            messagebox.showinfo("Info", "No valid distance measurements could be calculated.")
+            return None
+            
+        if plot_result:
+            # Create a new Toplevel window for the plot
+            plot_window = tk.Toplevel(self.master)
+            plot_window.title("DNAp-SSB Distance Analysis")
+            plot_window.geometry("800x600")
+            
+            # Create a Figure
+            fig = Figure(figsize=(8, 6))
+            ax = fig.add_subplot(111)
+            
+            # Plot the distance for each trace
+            for i, distance_data in enumerate(distances):
+                time = distance_data['ssb_time']
+                distance = distance_data['distance']
+                
+                # Plot both raw data and smoothed curve
+                ax.scatter(time, distance, marker='o', s=10, alpha=0.5, label=f"Raw {i+1}")
+                
+                # Smooth the distance data if there are enough points
+                if len(time) >= 5:
+                    # Use Savitzky-Golay filter with appropriate window size
+                    window_size = min(71, len(time) - (len(time) % 2) - 1)  # Ensure odd length
+                    if window_size < 5:
+                        window_size = 5  # Minimum window size
+                        
+                    smoothed_time = savgol_filter(time, window_size, 3)
+                    smoothed_distance = savgol_filter(distance, window_size, 3)
+                    ax.plot(smoothed_time, smoothed_distance, '-', linewidth=1.5, label=f"Smooth {i+1}")
+                else:
+                    # Just connect the dots for very short traces
+                    ax.plot(time, distance, '-', linewidth=1.5, label=f"Trace {i+1}")
+            
+            # Set labels and title
+            ax.set_xlabel('Time (s)')
+            ax.set_ylabel('Distance Between DNAp and SSB (μm)')
+            ax.set_title('DNAp-SSB Distance Analysis')
+            ax.grid(True, alpha=0.3)
+            
+            # Add a legend
+            if len(distances) <= 5:  # Only show legend for a reasonable number of traces
+                ax.legend(loc='best')
+            
+            # Add a horizontal line at y=0 to show when DNAp passes SSB
+            ax.axhline(y=0, color='k', linestyle='--', alpha=0.5)
+            
+            # Add text annotation explaining the sign of distance
+            ax.text(0.02, 0.02, "Negative: DNAp ahead of SSB\nPositive: SSB ahead of DNAp", 
+                   transform=ax.transAxes, fontsize=8, 
+                   bbox=dict(facecolor='white', alpha=0.7))
+            
+            # Adjust layout
+            fig.tight_layout()
+            
+            # Embed the plot into the Toplevel window
+            canvas = FigureCanvasTkAgg(fig, master=plot_window)
+            canvas.draw()
+            canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+            
+            # Add Navigation Toolbar
+            toolbar = NavigationToolbar2Tk(canvas, plot_window)
+            toolbar.update()
+            toolbar.pack(side=tk.TOP, fill=tk.X)
+            
+            # Add Export button
+            export_button = ttk.Button(
+                plot_window, 
+                text="Export Distance Data", 
+                command=lambda: self.export_distance_data(distances)
+            )
+            export_button.pack(side=tk.TOP, pady=5)
+        
+        # Return the distance data
+        return distances
+        
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to calculate DNAp-SSB distance: {e}")
+        return None 

@@ -10,6 +10,12 @@ from nptdms import TdmsFile
 from sympy import coth
 from fast_pwl_fit import FastPWLFit
 from scipy.signal import savgol_filter
+import matplotlib as mpl
+
+# Define numerical coth function for backup or direct calculation
+def numerical_coth(x):
+    """Numerical implementation of hyperbolic cotangent for arrays"""
+    return 1.0 / np.tanh(np.array(x, dtype=float))
 
 class OTDataAnalyzer:
     def __init__(self, root):
@@ -532,7 +538,6 @@ class OTDataAnalyzer:
             ax.set_xlabel('Time (s)')
             ax.set_ylabel('Distance (um)')
             ax.set_title('ssDNA/dsDNA Junction Position' + (' (Reverse Direction)' if reverse else ''))
-            ax.legend()
             
             # Invert y-axis and move x-axis to top
             ax.invert_yaxis()
@@ -544,8 +549,6 @@ class OTDataAnalyzer:
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred while tracking junction position: {str(e)}")
     
-
-    
     def plot_dna_polymerase_trace(self):
         """Plot DNA polymerase trace using exo and pol data"""
         try:
@@ -553,7 +556,16 @@ class OTDataAnalyzer:
             self.track_junction(reverse=False, use_exo_pol=True)
             
             # Save the plot
-            output_filename = os.path.splitext(self.filename_var.get())[0] + f'-cycle#{self.cycle_var.get()}-DNApTraces.eps'
+            base_dir = os.path.dirname(self.filename_var.get())
+            base_name = os.path.splitext(os.path.basename(self.filename_var.get()))[0]
+            cycle = self.cycle_var.get()
+            results_dir = os.path.join(base_dir, 'results')
+            
+            # Create results directory if it doesn't exist
+            if not os.path.exists(results_dir):
+                os.makedirs(results_dir)
+                
+            output_filename = os.path.join(results_dir, f"{base_name}-cycle#{cycle}-DNApTraces.eps")
             self.fig.savefig(output_filename, format='eps', dpi=300, bbox_inches='tight')
             
             # Show success message
@@ -586,17 +598,32 @@ class OTDataAnalyzer:
             # Convert time to seconds and prepare data
             time_seconds = time_range / 1000
             
+            # Setup results directory
+            base_dir = os.path.dirname(self.filename_var.get())
+            base_name = os.path.splitext(os.path.basename(self.filename_var.get()))[0]
+            cycle = self.cycle_var.get()
+            results_dir = os.path.join(base_dir, 'results')
+            
+            # Create results directory if it doesn't exist
+            if not os.path.exists(results_dir):
+                os.makedirs(results_dir)
+            
             # Initialize and fit the model
             segment_number = int(self.segment_number_var.get())
             pwlf = FastPWLFit(time_seconds, basepairs)
             pwlf.fit_model(segment_number)
             pwlf.plot_fit()
-            # # Clear previous plots
-            # self.fig.clear()
             
             # Save the fit results
-            output_filename = os.path.splitext(self.filename_var.get())[0] + f'-cycle#{self.cycle_var.get()}_segments.csv'
+            output_filename = os.path.join(results_dir, f"{base_name}-cycle#{cycle}_segments.csv")
             pwlf.save_results_csv(output_filename)
+            
+            # Save the fitted plot
+            plot_filename = os.path.join(results_dir, f"{base_name}-cycle#{cycle}_segments.png")
+            plt.savefig(plot_filename, format='png', dpi=300, bbox_inches='tight')
+            
+            # Show success message
+            messagebox.showinfo("Success", f"Linear segment fitting results saved to {results_dir}")
             
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred during linear segment fitting: {str(e)}")
@@ -618,8 +645,22 @@ class OTDataAnalyzer:
                 # Apply Savitzky-Golay filter to basepairs
                 basepairs_filtered = self.apply_savgol_filter(basepairs)
                 
-                # Save results
-                output_filename = os.path.splitext(self.filename_var.get())[0] + f'-cycle#{self.cycle_var.get()}_processed.xlsx'
+                # Extract base filename without extension and create results directory
+                base_dir = os.path.dirname(self.filename_var.get())
+                base_name = os.path.splitext(os.path.basename(self.filename_var.get()))[0]
+                cycle = self.cycle_var.get()
+                results_dir = os.path.join(base_dir, 'results')
+                
+                # Create results directory if it doesn't exist
+                if not os.path.exists(results_dir):
+                    os.makedirs(results_dir)
+                
+                # Define font settings for plots
+                font = {'family': 'DejaVu Sans', 'weight': 'normal', 'size': 16}
+                mpl.rc('font', **font)
+                
+                # 1. Save Excel data
+                output_filename = os.path.join(results_dir, f"{base_name}-cycle#{cycle}_processedData.xlsx")
                 data = {
                     'time': time_range,
                     'force': force_range,
@@ -632,12 +673,73 @@ class OTDataAnalyzer:
                 df = pd.DataFrame(data)
                 df.to_excel(output_filename)
                 
-                messagebox.showinfo("Success", f"Data saved to {output_filename}")
+                # 2. Save Plot 1: Basepair Change (Filtered)
+                plot_filename = os.path.join(results_dir, f"{base_name}-cycle#{cycle}-BasepairChange-filtered.png")
+                plt.figure(figsize=(6, 4))
+                plt.xlabel('Time (s)', fontdict=font)
+                plt.ylabel('Basepairs', fontdict=font)
+                plt.plot(time_range/1000, basepairs, color='lightgrey', linewidth=1)
+                plt.plot(time_range/1000, basepairs_filtered, color='green', linewidth=1, label='Basepairs')
+                plt.tight_layout()
+                plt.savefig(plot_filename, format='png', dpi=300, bbox_inches='tight')
+                plt.close()
+                
+                # 3. Save Plot 2: ssDNA Percentage (as Basepairs)
+                plot_filename = os.path.join(results_dir, f"{base_name}-cycle#{cycle}-ssDNA_percentage.png")
+                plt.figure(figsize=(8, 3))
+                plt.ylabel('Basepairs (bp)', fontdict=font)
+                plt.xlabel('Time (s)', fontdict=font)
+                plt.scatter(time_range/1000, basepairs, color='black', s=0.5, label='End-to-End Distance')
+                plt.tight_layout()
+                plt.savefig(plot_filename, format='png', dpi=300)
+                plt.close()
+                
+                # 4. Save Plot 3: DNA Polymerase Traces
+                plot_filename = os.path.join(results_dir, f"{base_name}-cycle#{cycle}-DNApTraces.png")
+                plt.figure(figsize=(6, 4))
+                plt.title('Time (s)', fontdict=font)
+                plt.ylabel('Distance (µm)', fontdict=font)
+                plt.scatter(time_range/1000, distance_range - float(self.bead_size_var.get()), color='black', s=2, label='End-to-End Distance')
+                plt.scatter(time_range/1000, junction_position, color='green', s=2, label='DNA Polymerase Trace')
+                plt.fill_between(time_range/1000, distance_range - float(self.bead_size_var.get()), junction_position, color='gray', alpha=0.2)
+                plt.ylim(0, 3.8)
+                ax = plt.gca()
+                ax.invert_yaxis()
+                ax.xaxis.set_ticks_position('top')
+                plt.tight_layout()
+                plt.savefig(plot_filename, format='png', dpi=300)
+                plt.close()
+                
+                # 5. Save Plot 4: Basepair Change (Raw)
+                plot_filename = os.path.join(results_dir, f"{base_name}-cycle#{cycle}-BasepairChange.png")
+                plt.figure(figsize=(8, 3))
+                plt.xlabel('Time (s)', fontdict=font)
+                plt.ylabel('Basepairs', fontdict=font)
+                plt.plot(time_range/1000, basepairs, color='red', marker='o', linestyle='dashed', linewidth=2, markersize=2, label='Basepairs')
+                plt.tight_layout()
+                plt.savefig(plot_filename, format='png', dpi=300, bbox_inches='tight')
+                plt.close()
+                
+                # Set matplotlib back to defaults
+                mpl.rcdefaults()
+                
+                # 6. Save the previous plot from the GUI as an EPS file (keeping this from original code)
+                output_filename_eps = os.path.join(results_dir, f"{base_name}-cycle#{cycle}-DNApTraces.eps")
+                self.track_junction(reverse=False, use_exo_pol=True)
+                self.fig.savefig(output_filename_eps, format='eps', dpi=300, bbox_inches='tight')
+                
+                messagebox.showinfo("Success", f"All data and plots saved to {results_dir}")
             else:
                 messagebox.showerror("Error", "Please set Exo and Pol time ranges first")
             
         except Exception as e:
             messagebox.showerror("Error", f"An error occurred while saving data: {str(e)}")
+
+    def save_plot_if_not_exists(self, filename):
+        """Check if file exists before saving to avoid overwriting"""
+        if os.path.exists(filename):
+            return False
+        return True
 
 if __name__ == "__main__":
     root = tk.Tk()

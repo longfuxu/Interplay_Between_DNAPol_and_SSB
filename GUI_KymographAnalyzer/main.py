@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 """
-Correlation Image Force Analyzer
+Kymograph Analyzer
 
-This script runs the Correlation Image Force Analyzer application, which
-provides a graphical user interface for analyzing correlation images and
-force data.
+This script runs the Kymograph Analyzer application, which provides a graphical
+user interface for analyzing kymograph data, with a particular focus on
+analyzing DNA polymerase and SSB interactions.
 
-The application allows for loading kymograph TDMS files and DNAp trace files,
-and analyzing the correlation between them, with a particular focus on
-detecting and analyzing SSB trajectories.
+The application allows for:
+- Loading and viewing kymograph data
+- Analyzing DNA polymerase trajectories
+- Detecting and analyzing SSB trajectories
+- Analyzing interactions between DNA polymerase and SSB
 
 Usage:
     python main.py
@@ -17,15 +19,12 @@ import tkinter as tk
 import sys
 import os
 import traceback
-import matplotlib
-# Use TkAgg backend for matplotlib
-matplotlib.use('TkAgg')
 
 # Add the current directory to the path so we can import the modules
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Import the main window class
-from gui.main_window import CorrelationImageForceAnalyzer
+from gui.main_window import KymographAnalyzer
 
 def show_error(exception_type, exception_value, exception_traceback):
     """Display uncaught exceptions in a message box"""
@@ -58,8 +57,8 @@ def main():
         # Create the root window
         root = tk.Tk()
         
-        # Set window title and icon
-        root.title("Correlation Image Force Analyzer")
+        # Set window title
+        root.title("Kymograph Analyzer")
         
         # Configure root grid
         root.grid_rowconfigure(0, weight=1)
@@ -69,10 +68,10 @@ def main():
         sys.excepthook = show_error
         
         # Create the application
-        app = CorrelationImageForceAnalyzer(root)
+        app = KymographAnalyzer(root)
         
         # Configure window size and position
-        root.geometry("1800x1000")
+        root.geometry("1920x1080")
         root.update_idletasks()  # Update "idle" tasks to get accurate window dimensions
         
         # Center the window on the screen
