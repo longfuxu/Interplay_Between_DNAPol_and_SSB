@@ -487,29 +487,29 @@ class KymographAnalyzer:
             # Handle different file types
             if filename.lower().endswith('.tdms'):
                 # TDMS file handling
-                metadata = TdmsFile.read_metadata(filename)
-                self.width = metadata.properties['Pixels per line']
-                self.px_size = float(metadata.properties['Scan Command.Scan Command.scanning_axes.0.pix_size_nm'])
-                self.px_dwell_time = float(metadata.properties['Scan Command.PI Fast Scan Command.pixel_dwell_time_ms'])
-                
-                tdms_file = TdmsFile(filename)
-                kymo_time = np.array([int(i) for i in tdms_file['Data']['Time (ms)'][:]])
-                kymo_position = np.array([int(i) for i in tdms_file['Data']['Actual position X (um)'][:]])
-                
-                # Load channel data
-                self.chn_r = np.array([int(i) for i in tdms_file['Data']['Pixel ch 1'][:]])
-                self.chn_g = np.array([int(i) for i in tdms_file['Data']['Pixel ch 2'][:]])
-                self.chn_b = np.array([int(i) for i in tdms_file['Data']['Pixel ch 3'][:]])
-                
-                height = len(kymo_time) / self.width
-                self.time_per_line = kymo_time[-1] / height
-                
-                # Create RGB image
-                self.img = np.vstack((self.chn_r, self.chn_g, self.chn_b)).T
-                self.img = self.img.reshape((int(height), int(self.width), 3))
-                self.img = self.img.transpose((1, 0, 2))
-                self.img = self.img.astype(np.uint16)
-                
+            metadata = TdmsFile.read_metadata(filename)
+            self.width = metadata.properties['Pixels per line']
+            self.px_size = float(metadata.properties['Scan Command.Scan Command.scanning_axes.0.pix_size_nm'])
+            self.px_dwell_time = float(metadata.properties['Scan Command.PI Fast Scan Command.pixel_dwell_time_ms'])
+            
+            tdms_file = TdmsFile(filename)
+            kymo_time = np.array([int(i) for i in tdms_file['Data']['Time (ms)'][:]])
+            kymo_position = np.array([int(i) for i in tdms_file['Data']['Actual position X (um)'][:]])
+            
+            # Load channel data
+            self.chn_r = np.array([int(i) for i in tdms_file['Data']['Pixel ch 1'][:]])
+            self.chn_g = np.array([int(i) for i in tdms_file['Data']['Pixel ch 2'][:]])
+            self.chn_b = np.array([int(i) for i in tdms_file['Data']['Pixel ch 3'][:]])
+            
+            height = len(kymo_time) / self.width
+            self.time_per_line = kymo_time[-1] / height
+            
+            # Create RGB image
+            self.img = np.vstack((self.chn_r, self.chn_g, self.chn_b)).T
+            self.img = self.img.reshape((int(height), int(self.width), 3))
+            self.img = self.img.transpose((1, 0, 2))
+            self.img = self.img.astype(np.uint16)
+            
             elif filename.lower().endswith(('.tif', '.tiff')):
                 # TIFF file handling
                 self.img = tifffile.imread(filename)
@@ -532,7 +532,7 @@ class KymographAnalyzer:
                         self.img = f['image'][:]
                     elif 'data' in f:
                         self.img = f['data'][:]
-                    else:
+            else:
                         # Try to find the first dataset that looks like an image
                         for key in f.keys():
                             if isinstance(f[key], h5py.Dataset) and len(f[key].shape) >= 2:
@@ -606,10 +606,10 @@ class KymographAnalyzer:
                     if position_candidates:
                         print(f"Using {position_candidates[0]} as junction_forward")
                         self.trace['junction_forward'] = self.trace[position_candidates[0]]
-                    else:
-                        # Create an empty column as a last resort
-                        print("No suitable column found for junction_forward. Creating empty column.")
-                        self.trace['junction_forward'] = np.zeros(len(self.trace))
+                else:
+                    # Create an empty column as a last resort
+                    print("No suitable column found for junction_forward. Creating empty column.")
+                    self.trace['junction_forward'] = np.zeros(len(self.trace))
                     
             # Create junction_reverse if not found
             if 'junction_reverse' not in self.trace.columns:
@@ -632,7 +632,7 @@ class KymographAnalyzer:
             
             # Try to plot junction forward if possible
             try:
-                self.plot_junction_forward()
+            self.plot_junction_forward()
             except Exception as e:
                 print(f"Could not plot junction forward: {str(e)}")
             
@@ -706,7 +706,7 @@ class KymographAnalyzer:
         """Update OT data preview"""
         if self.trace is not None:
             try:
-                self.preview_ax.clear()
+            self.preview_ax.clear()
                 
                 # Check if we have the required columns
                 if 'time' not in self.trace.columns:
@@ -734,7 +734,7 @@ class KymographAnalyzer:
                 
                 # Add grid and labels
                 self.preview_ax.grid(True, alpha=0.3)
-                self.preview_ax.set_xlabel("Time")
+            self.preview_ax.set_xlabel("Time")
                 self.preview_ax.set_ylabel(y_label)
                 self.preview_ax.set_title("OT Data Preview")
                 
@@ -744,7 +744,7 @@ class KymographAnalyzer:
                 
                 # Update the canvas
                 self.preview_fig.tight_layout()
-                self.preview_canvas.draw()
+            self.preview_canvas.draw()
                 
                 # Update status
                 self.status_var.set("OT data preview updated")

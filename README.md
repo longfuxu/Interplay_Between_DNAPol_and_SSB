@@ -1,6 +1,6 @@
 # DNA Polymerase and SSB Interaction Analysis
 
-This repository houses a comprehensive suite of analytical tools designed to investigate the dynamic interactions between DNA polymerase and Single-Strand Binding (SSB) protein at both single-molecule and ensemble levels. These tools enable quantitative characterization of the mechanistic interplay between these essential replication proteins, providing insights into fundamental processes of DNA metabolism.
+This repository contains the full codebase associated with our [manuscript](https://www.biorxiv.org/content/10.1101/2025.03.07.642097v1), providing a comprehensive suite of analytical tools for studying the dynamic interactions between DNA polymerase and Single-Strand Binding (SSB) proteins. The toolkit supports both single-molecule and ensemble-level analyses, enabling quantitative characterization of the mechanistic interplay between these essential components of the DNA replication machinery. 
 
 The repository is structured into three primary modules, each addressing specific aspects of DNA-protein interactions:
 
@@ -102,33 +102,7 @@ Follow the on-screen prompts to load your data and configure analysis parameters
 *Figure: The Kymograph Analyzer GUI interface showing the correlation between force measurements and fluorescence imaging data*
 
 ### CodeOcean Capsule for Immediate Reproducibility
-We provide a [CodeOcean capsule](https://codeocean.com/) that contains our complete computational environment and analysis pipeline, allowing for immediate reproduction of our results without installing any dependencies. The capsule includes:
-
-- Pre-configured Python environment with all required packages
-- Example datasets from our published experiments
-- Ready-to-run analysis scripts and notebooks
-- Pre-computed results for validation
-
-To use the CodeOcean capsule:
-1. Visit our capsule URL (provided upon publication)
-2. Click "Run" to execute the entire analysis pipeline
-3. Modify parameters or data inputs as needed in the web interface
-4. Download or share your results directly from the platform
-
-Alternatively, if you have downloaded the capsule locally, you can run it directly:
-
-```bash
-# Navigate to the CodeOcean Capsule directory
-cd CodeOcean\ Capsule/code
-
-# Run the main analysis script
-python -u main.py "$@"
-
-# Check the results in the results folder
-cd ../results
-```
-
-This approach ensures perfect reproducibility regardless of your local computing environment, eliminating concerns about package versions or system configurations.
+We provide a [CodeOcean capsule](https://codeocean.com/) that contains our complete computational environment and analysis pipeline, allowing for immediate reproduction of our results without installing any dependencies. The CodeOcean link will be updated after publication.
 
 ### Installation Steps
 
@@ -302,11 +276,7 @@ Our ongoing development efforts focus on enhancing the analytical capabilities a
 
 - **Enhanced User Interface Development**: We are developing comprehensive graphical user interfaces to make these sophisticated analytical tools accessible to researchers without extensive coding experience.
 
-- **Advanced Statistical Frameworks**: Implementation of Bayesian statistical approaches for more robust parameter estimation and uncertainty quantification, including [Bayesian changepoint detection methods optimized for single-molecule analysis](https://github.com/longfuxu/bayesian_changepoint_detection_single_molecule).
-
 - **High-Throughput Analysis Pipeline**: Development of scalable computational workflows for efficiently processing and analyzing large experimental datasets, facilitating systematic studies of DNA polymerase-SSB interactions across diverse experimental conditions.
-
-- **Multi-Modal Data Integration**: New analytical approaches to integrate complementary data types (force spectroscopy, fluorescence imaging, biochemical assays) into unified models of DNA replication protein function.
 
 ## Contributing
 We welcome contributions to enhance and expand this project. Please fork the repository, make your changes, and submit a pull request. For contribution you can also contact Longfu Xu or Prof. Gijs Wuite
@@ -317,15 +287,11 @@ Please note that the code in this repository is custom written for internal lab 
 ## Citation
 When using this software for your research, please cite:
 
-Xu, L. (2023). Grab, manipulate and watch single DNA molecule replication. [PhD-Thesis - Research and graduation internal, Vrije Universiteit Amsterdam]. https://doi.org/10.5463/thesis.424
+- Xu, L., Halma, M.T.J. & Wuite, G.J.L. Mapping fast DNA polymerase exchange during replication. Nature Communications 15, 5328 (2024). https://doi.org/10.1038/s41467-024-49612-3
 
-If you use specific modules of this software, please also consider citing our corresponding research papers:
 
-- For single-molecule DNA polymerase analysis:
-  Xu, L., et al. (2023). *Direct visualization of the interplay between T7 DNA polymerase and single-stranded DNA binding protein during DNA replication*. [Journal details to be updated upon publication]
+- Xu, L. (2023). Grab, manipulate and watch single DNA molecule replication. [PhD-Thesis - Research and graduation internal, Vrije Universiteit Amsterdam]. https://doi.org/10.5463/thesis.424
 
-- For CodeOcean reproducibility capsule:
-  Xu, L., et al. (2023). *Computational pipeline for analyzing DNA polymerase-SSB interactions*. [CodeOcean DOI to be updated upon publication]
 
 ## License
 
@@ -333,9 +299,9 @@ This project is licensed under MPL-2.0 license. See `LICENSE` file for more deta
 
 ## Acknowledgments
 
-This software package represents a significant advancement in the field of DNA replication analysis, enabling researchers to directly visualize and quantitatively analyze the complex molecular interactions that underlie DNA replication processes. The tools provided here bridge the gap between single-molecule biophysics and biochemical assays, offering unprecedented insights into the dynamics of essential replication proteins.
+The tools in this repository are designed to bridge the gap between single-molecule biophysics and traditional biochemical assays, offering new insights into the dynamic behavior of key replication proteins.
 
-All codes listed in this repository are developed by Dr. Longfu Xu (longfuxu.com) during the PhD work in [Gijs Wuite Lab](http://www.gijswuite.com/). Special thanks to all contributors and supporters of this project.
+All code in this repository was developed by Dr. Longfu Xu (longfuxu.com) during his PhD research in the Gijs Wuite Lab, building on and inspired by earlier foundational work in the field.
 
 
 
